@@ -11,7 +11,7 @@ authRouter.get(
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:5173/auth/success",
+    successRedirect: "https://summafyy.netlify.app/auth/success",
     failureRedirect: "/auth/failure",
   })
 );
