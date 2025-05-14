@@ -17,9 +17,18 @@ authRouter.get(
   }),
   (req, res) => {
     // On success, redirect to frontend with a flag or nothing
-    res.redirect("https://summafyy.netlify.app/auth/verify");
+    res.redirect("https://summafy-backend-production.up.railway.app/auth/set-cookie");
   }
 );
+
+authRouter.get("/set-cookie", (req, res) => {
+  console.log("User authenticated:", req);
+  if (req.isAuthenticated()) {
+    res.redirect("https://summafyy.netlify.app/auth/verify");
+  } else {
+    res.redirect("https://summafyy.netlify.app/");
+  }
+});
 
 // Auth check
 authRouter.get("/success", isAuthenticated, (req, res) => {
