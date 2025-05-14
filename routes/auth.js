@@ -12,13 +12,17 @@ authRouter.get(
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "https://summafyy.netlify.app/auth/success",
     failureRedirect: "/auth/failure",
-  })
+    session: true,
+  }),
+  (req, res) => {
+    // On success, redirect to frontend with a flag or nothing
+    res.redirect("https://summafyy.netlify.app/auth/verify");
+  }
 );
 
 // Auth check
-authRouter.get("/success", isAuthenticated,(req, res) => {
+authRouter.get("/success", isAuthenticated, (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
