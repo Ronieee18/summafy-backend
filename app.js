@@ -6,6 +6,8 @@ import passport from "passport";
 import dotenv from "dotenv";
 import { authRouter } from "./routes/auth.js";
 import "./config/passport.js";
+import MongoStore from "connect-mongo";
+
 dotenv.config();
 
 const app = express();
@@ -22,11 +24,15 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URL, // make sure this is set in your .env file
+      ttl: 14 * 24 * 60 * 60, // Session lifetime (optional)
+    }),
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: "none", // ← allow sending cookies to frontend
-      secure: true, // ← true only if you're using HTTPS
+      sameSite: "none", // for cross-origin cookies
+      secure: true, // for HTTPS only
     },
   })
 );
