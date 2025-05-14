@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import { isAuthenticated } from "../middleware/auth.middleware";
+import { isAuthenticated } from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
 authRouter.get(
