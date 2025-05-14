@@ -18,20 +18,9 @@ authRouter.get(
   (req, res) => {
     console.log("User after Google login:", req.user); // ← Add this log
     // On success, redirect to frontend with a flag or nothing
-    res.redirect(
-      "https://summafy-backend-production.up.railway.app/auth/set-cookie"
-    );
+    res.redirect("https://summafyy.netlify.app/auth/verify");
   }
 );
-
-authRouter.get("/set-cookie", (req, res) => {
-  console.log("User authenticated:", req.isAuthenticated()); // ← Add this log
-  if (req.isAuthenticated()) {
-    res.redirect("https://summafyy.netlify.app/auth/verify");
-  } else {
-    res.redirect("https://summafyy.netlify.app/");
-  }
-});
 
 // Auth check
 authRouter.get("/success", isAuthenticated, (req, res) => {
