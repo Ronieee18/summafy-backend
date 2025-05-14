@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import { isAuthenticated } from "../middleware/auth.middleware";
 
 const authRouter = Router();
 authRouter.get(
@@ -17,7 +18,7 @@ authRouter.get(
 );
 
 // Auth check
-authRouter.get("/success", (req, res) => {
+authRouter.get("/success", isAuthenticated,(req, res) => {
   res.json({ success: true, user: req.user });
 });
 
