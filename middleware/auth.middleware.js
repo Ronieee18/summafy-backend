@@ -1,7 +1,20 @@
-// middleware/isAuthenticated.js
+import jwt from "jsonwebtoken";
+
 export const isAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
   }
-  res.status(401).json({ error: "Unauthorized" });
+
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // You can access user data via req.user in routes
+    console.log("Decoded user:", req.user);
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
 };

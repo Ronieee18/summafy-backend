@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: "https://summafyy.netlify.app", // frontend URL
+    origin: "http://localhost:5173", // frontend URL
     credentials: true, // allow cookies across origins
   })
 );

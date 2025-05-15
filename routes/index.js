@@ -8,7 +8,7 @@ import {
 import { isAuthenticated } from "../middleware/auth.middleware.js";
 
 const router = Router();
-router.post("/format", formatNote);
+router.post("/format", isAuthenticated, formatNote);
 router.post("/note/create", isAuthenticated, createNote);
 router.get("/note", isAuthenticated, getUserNotes);
 router.get("/note/:id", isAuthenticated, getNoteById);

@@ -1,7 +1,10 @@
 import { Router } from "express";
 import passport from "passport";
 import { isAuthenticated } from "../middleware/auth.middleware.js";
-
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+import User from "../models/User.js";
 const authRouter = Router();
 authRouter.get(
   "/google",
@@ -11,15 +14,15 @@ authRouter.get(
 // Callback
 authRouter.get(
   "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/auth/failure",
-    session: true,
-  }),
+  passport.authenticate("google", { session: false }),
   (req, res) => {
-    console.log("User after Google login:", req.session); // ← Add this log
-    console.log("User after Google login:", req.user); // ← Add this log
-    // On success, redirect to frontend with a flag or nothing
-    res.redirect("https://summafyy.netlify.app/auth/verify");
+    console.log("User authenticated:", req.user);
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    console.log("Generated JWT token:", token);
+    // Redirect with token in URL (hash to avoid exposing to server)
+    res.redirect(`http://localhost:5173/auth/verify#token=${token}`);
   }
 );
 
@@ -46,11 +49,18 @@ authRouter.get("/logout", (req, res) => {
 });
 
 authRouter.get("/user", (req, res) => {
-  console.log("in /user:", req.session);
-  if (req.isAuthenticated()) {
-    res.status(200).json({ authenticated: true, user: req.user });
-  } else {
-    res.status(401).json({ authenticated: false });
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: "No token" });
+
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    User.findById(decoded.id).then((user) => {
+      if (!user) return res.status(404).json({ message: "User not found" });
+      res.json({ user });
+    });
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
   }
 });
 
