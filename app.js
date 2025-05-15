@@ -24,15 +24,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URL, // make sure this is set in your .env file
-      ttl: 14 * 24 * 60 * 60, // Session lifetime (optional)
-    }),
     cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
-      sameSite: "none", // for cross-origin cookies
-      secure: true, // for HTTPS only
+      secure: true, // must be true in HTTPS
+      sameSite: "none", // must be 'none' for cross-site cookies
     },
   })
 );
