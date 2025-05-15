@@ -16,7 +16,7 @@ authRouter.get(
   "/google/callback",
   passport.authenticate("google", { session: false }),
   (req, res) => {
-    console.log("User authenticated:", req.user);
+    console.log("new user:", req.user);
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
