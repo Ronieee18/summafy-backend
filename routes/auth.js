@@ -16,6 +16,7 @@ authRouter.get(
     session: true,
   }),
   (req, res) => {
+    console.log("User after Google login:", req.session); // ← Add this log
     console.log("User after Google login:", req.user); // ← Add this log
     // On success, redirect to frontend with a flag or nothing
     res.redirect("https://summafyy.netlify.app/auth/verify");
@@ -45,6 +46,7 @@ authRouter.get("/logout", (req, res) => {
 });
 
 authRouter.get("/user", (req, res) => {
+  console.log("in /user:", req.session);
   if (req.isAuthenticated()) {
     res.status(200).json({ authenticated: true, user: req.user });
   } else {
