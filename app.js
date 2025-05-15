@@ -25,7 +25,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URL, // your MongoDB connection string
+      mongoUrl: process.env.MONGODB_URL, // your MongoDB connection string
       collectionName: "sessions",
     }),
     cookie: {
