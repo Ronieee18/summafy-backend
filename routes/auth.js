@@ -22,7 +22,7 @@ authRouter.get(
     });
     console.log("Generated JWT token:", token);
     // Redirect with token in URL (hash to avoid exposing to server)
-    res.redirect(`http://localhost:5173/auth/verify#token=${token}`);
+    res.redirect(`https://summafyy.netlify.app/auth/verify#token=${token}`);
   }
 );
 
